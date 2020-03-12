@@ -1,0 +1,35 @@
+version: '2.2'
+services:
+  elasticsearch2:
+    image: elasticsearch:7.4.0
+    container_name: es74_02
+    environment:
+      - cluster.name=es-cluster
+      - node.name=es74_02
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms5120m -Xmx5120m"
+      - discovery.seed_hosts=es74_01,es74_02
+      - network.publish_host=19.50.75.79
+      - cluster.initial_master_nodes=es74_01,es74_02
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - /data/es:/usr/share/elasticsearch/data
+    networks:
+      - esnet
+    extra_hosts:
+      - "es74_01:19.50.75.69"
+      - "es74_02:19.50.75.79"
+    ports:
+      - 9200:9200
+      - 9300:9300
+
+#volumes:
+#  esdata:
+#    driver: local
+
+networks:
+  esnet:
+    driver: bridge

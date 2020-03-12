@@ -1,0 +1,44 @@
+###################### 政务云防火墙会话优化：
+###### 去掉keyword子字段
+POST _template/优化日志
+{
+    "order" : 1,
+    "version" : 60001,
+    "index_patterns" : [
+      "logstash-*"
+    ],
+    "mappings" : {
+      "properties" : {
+        "源IP":{
+          "type": "text"
+        },
+        "目的IP":{
+          "type": "text"
+        },
+        "目的端口" : {
+          "type": "text"
+        },
+        "协议" : {
+          "type": "text"
+        },
+        "策略ID" : {
+          "type": "text"
+        },
+        "状态" : {
+          "type": "text"
+        },
+        "结束原因" : {
+          "type": "text"
+        },
+        "源端口": {
+          "type": "text"
+        },
+        "time": {
+          "type": "text", 
+          "index": false
+        }
+      }
+    }
+}
+
+

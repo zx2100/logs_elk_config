@@ -1,0 +1,50 @@
+version: '2.2'
+services:
+  elasticsearch2:
+    image: elasticsearch:7.4.0
+    container_name: es74_04
+    environment:
+        # 是否成为master节点
+      - node.master=false
+        # 此节点是否配置成数据节点
+      - node.data=true
+        # 集群名称
+      - cluster.name=es-cluster
+        # 节点名称
+      - node.name=es74_04
+        # 引导锁
+      - bootstrap.memory_lock=true
+        # JVM的堆大小，xms和xmx应该保持一致
+      - "ES_JAVA_OPTS=-Xms12288m -Xmx12288m"
+        # 往哪些节点发送数据，应该把集群的master节点写上
+      - discovery.seed_hosts=es74_01,es74_02,es74_03
+        # 绑定的地址，必须写成宿主机的ip
+      - network.publish_host=19.130.210.63
+        # 初始化集群时的master节点，在初始化集群时配置，当集群已经启动并稳定后，不用修改这里的配置。
+      - cluster.initial_master_nodes=es74_01,es74_02
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+        # 数据存储映射
+      - /data/:/usr/share/elasticsearch/data
+    networks:
+      - esnet
+    extra_hosts:
+      # 用于写进容器的hosts文件
+      - "es74_01:19.130.210.58"
+      - "es74_02:19.130.210.59"
+      - "es74-03:19.130.210.57"
+      - "es74-04:19.130.210.63"
+    ports:
+      - 9200:9200
+      - 9300:9300
+
+# volumes:
+#   esdata:
+#     driver: local
+
+networks:
+  esnet:
+    driver: bridge

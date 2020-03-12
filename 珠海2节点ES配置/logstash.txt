@@ -1,0 +1,41 @@
+# 仅收集
+input {
+  udp {
+    port => 5014
+    type => uis
+  }
+  # 根墙日志
+  udp {
+    port => 5114
+    type => genqiang
+  }
+
+}
+
+filter {
+	if [type] == "genqiang" {
+		grok {
+		match => {
+			"message" => "<\d*>(?<time>\w+\s+\d*\s?\d*:\d*:\d*\s+\d{4})\s(?<设备名称>\w+.*)\s+%%10(?<模块名>\w+)/.*:\s+(?<消息>.*).\\u0000"
+		}
+		}
+	}
+}
+	
+
+
+output {
+  if [type] == "uis" {
+  	elasticsearch{
+      hosts=>["19.50.75.79:9200"]
+	      index =>"zhzwy-uis-%{+YYYY.MM.dd}"
+	      }
+    }
+  if [type] == "genqiang" {
+    stdout {
+      codec => rubydebug
+    }
+
+  }
+
+}

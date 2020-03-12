@@ -1,0 +1,57 @@
+version: '2.2'
+services:
+  cerebro:
+    image: lmenezes/cerebro:0.8.3
+    container_name: cerebro
+    ports:
+      - "9000:9000"
+    command:
+      - -Dhosts.0.host=http://elasticsearch:9200
+    networks:
+      - esnet
+  kibana:
+    image: kibana:7.4.0
+    container_name: kibana74
+    environment:
+      - I18N_LOCALE=zh-CN
+      - XPACK_GRAPH_ENABLED=true
+      - TIMELION_ENABLED=true
+      - XPACK_MONITORING_COLLECTION_ENABLED="true"
+    ports:
+      - "5601:5601"
+    networks:
+      - esnet
+  elasticsearch:
+    image: elasticsearch:7.4.0
+    container_name: es74_01
+    environment:
+      - cluster.name=es-cluster
+      - node.name=es74_01
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms5120m -Xmx5120m"
+      - discovery.seed_hosts=es74_01,es74_02
+      # 这个必须设置成容器宿主机的IP，否则，不能在多节点中竞选
+      - network.publish_host=19.130.210.58
+      - cluster.initial_master_nodes=es74_01,es74_02
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200
+      - 9300:9300
+    networks:
+      - esnet
+    extra_hosts:
+      - "es74_01:19.130.210.58"
+      - "es74_02:19.130.210.59"
+
+volumes:
+  esdata:
+    driver: local
+
+networks:
+  esnet:
+    driver: bridge
