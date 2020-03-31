@@ -1,0 +1,17 @@
+version: '2.2'
+services:
+  logstash:
+    image: logstash:7.4.0
+    container_name: logstash_01
+    volumes:
+      - /root/logstash/logstash.conf:/opt/logstash.conf
+      # - /root/logstash/logstash.conf:/opt/
+    ports:
+      - 5014:5014
+      - 5114:5114
+      - 5115:5115
+    entrypoint:
+      - /usr/share/logstash/bin/logstash
+      - -f
+      - /opt/logstash.conf
+

@@ -1,5 +1,0 @@
-<190>Mar  2 10:39:19 2020 ZH-ZWY-FW-M9K-IRF %%10SSLVPNK/6/SSLVPN_IP_RESOURCE_PERMIT: -Chassis=1-Slot=0.1; User eshore of context h3csslvpn from 218.13.12.74 permitted to access 19.50.75.79:22.\u0000
-
-grok模式：
-# 第一次匹配
-<\d*>(?<time>\w+\s+\d*\s?\d*:\d*:\d*\s+\d{4})\s(?<设备名称>\w+.*)\s+%%10(?<模块名>\w+)/.*:\s+(?<消息>.*).\\u0000

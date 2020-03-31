@@ -11,7 +11,7 @@ services:
       - esnet
   kibana:
     image: kibana:7.4.0
-    container_name: kibana74
+    container_name: kibana7.x
     environment:
       - I18N_LOCALE=zh-CN
       - XPACK_GRAPH_ENABLED=true
@@ -23,16 +23,16 @@ services:
       - esnet
   elasticsearch:
     image: elasticsearch:7.4.0
-    container_name: es74_01
+    container_name: es_01
     environment:
       - cluster.name=es-cluster
-      - node.name=es74_01
+      - node.name=es_01
       - bootstrap.memory_lock=true
       - "ES_JAVA_OPTS=-Xms5120m -Xmx5120m"
-      - discovery.seed_hosts=es74_01,es74_02
+      - discovery.seed_hosts=es_0
       # 这个必须设置成容器宿主机的IP，否则，不能在多节点中竞选
       - network.publish_host=19.50.75.69
-      - cluster.initial_master_nodes=es74_01
+      - cluster.initial_master_nodes=es_01
     ulimits:
       memlock:
         soft: -1
@@ -45,12 +45,12 @@ services:
     networks:
       - esnet
     extra_hosts:
-      - "es74_01:19.50.75.69"
-      - "es74_02:19.50.75.84"
+      - "es_01:19.50.75.69"
+      - "es_02:19.50.75.79"
 
-# volumes:
-#   esdata:
-#     driver: local
+#volumes:
+#  esdata:
+#    driver: local
 
 networks:
   esnet:

@@ -1,0 +1,5 @@
+
+<190>2019-11-29T09:44:23.134658+08:00 1304410182000832(root)[h:SG-6000][p:6] 44243622 Traffic@FLOW: SESSION: 19.130.221.235:46536->202.96.128.86:53(UDP), interface aggregate1.3155, vr trust-vr, policy 7145, user -@-, host -, session start\n\u0000
+
+
+<\d*>%{TIMESTAMP_ISO8601:time}.*Traffic@FLOW:\s*SESSION:\s*%{IPV4:sourceIP}:(?<sport>\d+).*%{IPV4:destIP}:(?<destPort>\d+)[(](?<proto>\w+).*policy\s*(?<policyID>\d+).*(?<state>(session start|session end)),(?<s>\w+)
